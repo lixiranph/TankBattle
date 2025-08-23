@@ -57,13 +57,44 @@ class MainGame():
             _display.update()
     #创建敌方坦克
     def createEnemyTank(self):
-        top=100
-        speed=random.randint(3,6)
-        for i in range(MainGame.EnemyTank_count):
-            #每次随机生成一个left值
-            left = random.randint(1, 7)
-            eTank=EnemyTank(left*100,top,speed)
-            MainGame.EnemyTank_list.append(eTank)
+        MainGame.EnemyTank_list.clear()
+
+        # 允许生成的纵向区域（敌人一般从上方进入）
+        TOP_MIN, TOP_MAX = 40, 180
+        GAP = 12  # 敌人与敌人/我方之间的最小间距（像素）
+        MAX_TRIES = 500  # 最多尝试放置次数，避免死循环
+
+        tries = 0
+        while len(MainGame.EnemyTank_list) < MainGame.EnemyTank_count and tries < MAX_TRIES:
+            tries += 1
+            speed = random.randint(3, 6)
+
+            # 先“临时”创建一个敌人，拿到它的 rect 尺寸
+            e = EnemyTank(0, 0, speed)
+            e.rect.left = random.randint(0, MainGame.Screen_width - e.rect.width)
+            e.rect.top = random.randint(TOP_MIN, min(TOP_MAX, MainGame.Screen_height - e.rect.height))
+
+            # 用 inflate 给每个对象扩一圈 GAP 做安全间距
+            cand = e.rect.inflate(GAP, GAP)
+
+            # 先与我方坦克判定
+            if cand.colliderect(MainGame.TANK_P1.rect.inflate(GAP, GAP)):
+                continue
+
+            # 再与已有的敌人判定
+            conflict = False
+            for other in MainGame.EnemyTank_list:
+                if cand.colliderect(other.rect.inflate(GAP, GAP)):
+                    conflict = True
+                    break
+            if conflict:
+                continue
+
+            # 位置安全，收下
+            MainGame.EnemyTank_list.append(e)
+
+        if len(MainGame.EnemyTank_list) < MainGame.EnemyTank_count:
+            print(f'仅生成 {len(MainGame.EnemyTank_list)} 个敌人（空间不足或达到尝试上限）')
     #将坦克加入到窗口中
     def blitEnemyTank(self):
         for eTank in MainGame.EnemyTank_list:
