@@ -11,8 +11,10 @@
     2.坦克类（敌方坦克 己方坦克）
         移动
         射击
+        展示坦克
     3.子弹
         移动
+        展示子弹
     4.爆炸效果
         展示爆炸效果
     5.墙壁
@@ -23,10 +25,59 @@
     涉及到的类，用代码简单的实现
 '''
 import pygame
-class MainGame():
-    def __init__(self):
-        pass
-    def startGame(self):
-        pass
-    def endGame(self):
-        pass
+# class MainGame():
+#     def __init__(self):
+#         pass
+#     def startGame(self):
+#         '''开始游戏方法'''
+#         pass
+#     def endGame(self):
+#         '''结束游戏方法'''
+#         pass
+# class Tank():
+#     def __init__(self):
+#         pass
+#     def move(self):
+#         '''移动坦克方法'''
+#         pass
+#     def shot(self):
+#         '''坦克射击方法'''
+#         pass
+#     def displayTank(self):
+#         '''展示坦克'''
+#         pass
+# class MyTank(Tank):
+#     def __init__(self):
+#         pass
+# class EnemyTank(Tank):
+#     def __init__(self):
+#         pass
+# class Bullet():
+#     def __init__(self):
+#         pass
+#     def move(self):
+#         '''移动子弹的方法'''
+#         pass
+#     def displayBullet(self):
+#         '''展示子弹的方法'''
+#         pass
+# class Explode():
+#     def __init__(self):
+#         pass
+#     def dispalyExplode(self):
+#         '''展示爆炸'''
+#         pass
+# class Wall():
+#     def __init__(self):
+#         pass
+#     def displayWall(self):
+#         '''展示墙壁'''
+#         pass
+# class Music():
+#     def __init__(self):
+#         pass
+#     def play(self):
+#         '''开始播放音乐'''
+#         pass
+
+print(pygame.font.get_fonts())
