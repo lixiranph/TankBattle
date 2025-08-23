@@ -3,6 +3,7 @@ v1.09
     优化功能：
         优化坦克的移动方法
         按住键盘方向键持续移动
+        还没做完
 '''
 import pygame
 _display = pygame.display
