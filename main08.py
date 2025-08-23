@@ -8,6 +8,7 @@ v1.10
         2. 创建敌方坦克，将敌方坦克展示到窗口中
 '''
 import pygame,time,random
+clock = pygame.time.Clock()
 
 _display = pygame.display
 version='v1.10'
@@ -53,8 +54,8 @@ class MainGame():
             if MainGame.TANK_P1 and not MainGame.TANK_P1.stop:
                 MainGame.TANK_P1.move()
             #窗口的刷新
-            time.sleep(0.02)
             _display.update()
+            clock.tick(60)
     #创建敌方坦克
     def createEnemyTank(self):
         MainGame.EnemyTank_list.clear()

@@ -6,8 +6,9 @@ v1.10
 '''
 import pygame
 import time
+import random
 _display = pygame.display
-version='v1.09'
+version='v1.10'
 COLOR_RED = pygame.Color(255, 0, 0)
 COLOR_BLACK = pygame.Color(0, 0, 0)
 #游戏主窗口
@@ -17,6 +18,8 @@ class MainGame():
     Screen_width = 800
     #创建我方坦克
     TANK_P1=None
+    EnemyTank_list=[]#存储所有敌方坦克
+    EnemyTank_count=5#创建敌方坦克的数量
     def __init__(self):
         pass
 
@@ -30,6 +33,8 @@ class MainGame():
         MainGame.TANK_P1=Tank(400,MainGame.Screen_height-200)
         #设置一下游戏标题
         _display.set_caption(f'坦克大战{version}')
+        #？创建敌方坦克
+        self.createEnemyTank()
         clock = pygame.time.Clock()# ← 新增：帧率控制
         #让窗口持续刷新操作
         while True:
@@ -43,6 +48,8 @@ class MainGame():
             MainGame.window.blit(self.getTextSurface(f'剩余敌方坦克5辆'),(5,5))
             #将我方坦克加入到窗口中
             MainGame.TANK_P1.displayTank()
+
+            self.blitEnemyTank()
             #根据坦克开关状态调用坦克的移动方法
             # if MainGame.TANK_P1 and not MainGame.TANK_P1.stop:
             #     MainGame.TANK_P1.move()
@@ -50,6 +57,49 @@ class MainGame():
             #窗口的刷新
             _display.update()
             clock.tick(60)  # ← 用 tick 控帧，代替 time.sleep
+    def createEnemyTank(self):
+        MainGame.EnemyTank_list.clear()
+
+        # 允许生成的纵向区域（敌人一般从上方进入）
+        TOP_MIN, TOP_MAX = 40, 180
+        GAP = 12  # 敌人与敌人/我方之间的最小间距（像素）
+        MAX_TRIES = 500  # 最多尝试放置次数，避免死循环
+
+        tries = 0
+        while len(MainGame.EnemyTank_list) < MainGame.EnemyTank_count and tries < MAX_TRIES:
+            tries += 1
+            speed = random.randint(3, 6)
+
+            # 先“临时”创建一个敌人，拿到它的 rect 尺寸
+            e = EnemyTank(0, 0, speed)
+            e.rect.left = random.randint(0, MainGame.Screen_width - e.rect.width)
+            e.rect.top = random.randint(TOP_MIN, min(TOP_MAX, MainGame.Screen_height - e.rect.height))
+
+            # 用 inflate 给每个对象扩一圈 GAP 做安全间距
+            cand = e.rect.inflate(GAP, GAP)
+
+            # 先与我方坦克判定
+            if cand.colliderect(MainGame.TANK_P1.rect.inflate(GAP, GAP)):
+                continue
+
+            # 再与已有的敌人判定
+            conflict = False
+            for other in MainGame.EnemyTank_list:
+                if cand.colliderect(other.rect.inflate(GAP, GAP)):
+                    conflict = True
+                    break
+            if conflict:
+                continue
+
+            # 位置安全，收下
+            MainGame.EnemyTank_list.append(e)
+
+        if len(MainGame.EnemyTank_list) < MainGame.EnemyTank_count:
+            print(f'仅生成 {len(MainGame.EnemyTank_list)} 个敌人（空间不足或达到尝试上限）')
+    #将坦克加入到窗口中
+    def blitEnemyTank(self):
+        for eTank in MainGame.EnemyTank_list:
+            eTank.displayTank()
 
     def getTextSurface(self,text):
         '''左上角文字绘制的功能'''
@@ -175,8 +225,43 @@ class MyTank(Tank):
     def __init__(self):
         pass
 class EnemyTank(Tank):
-    def __init__(self):
-        pass
+    def __init__(self,left,top,speed):
+        #图片集
+        #方向
+        #图片
+        #rect
+        #速度
+        #live
+        self.images = {
+            'U': pygame.image.load(r'EnemyTank\P1\EnemyP1U.png').convert_alpha(),
+            'D': pygame.image.load(r'EnemyTank\P1\EnemyP1D.png').convert_alpha(),
+            'L': pygame.image.load(r'EnemyTank\P1\EnemyP1L.png').convert_alpha(),
+            'R': pygame.image.load(r'EnemyTank\P1\EnemyP1R.png').convert_alpha()
+        }
+        self.direction = self.randDirection()
+        self.image = self.images[self.direction]
+        # 坦克所在的区域 Rect类型
+        self.rect = self.image.get_rect()
+        # 指定坦克初始化位置 分别距X，Y轴的位置
+        self.rect.left = left
+        self.rect.top = top
+        # 新增速度属性
+        self.speed = speed
+        # 新增属性：坦克的移动开关
+        self.stop = True
+    def randDirection(self):
+        num=random.randint(1,4)
+        if num==1:
+            return 'U'
+        elif num==2:
+            return 'D'
+        elif num==3:
+            return 'L'
+        elif num==4:
+            return 'R'
+    # def displayEnemyTank(self):
+    #     super().displayTank()
+
 class Bullet():
     def __init__(self):
         pass
