@@ -218,7 +218,7 @@ class MainGame():
         #结束python解释器
         exit()
 class Tank():
-    def __init__(self,left,top):
+    def __init__(self,left,top,speed=5):
         self.images = {
             'U': pygame.image.load(r'Mytank/p1tankU.gif').convert_alpha(),
             'D': pygame.image.load(r'Mytank/p1tankD.gif').convert_alpha(),
@@ -233,7 +233,7 @@ class Tank():
         self.rect.left=left
         self.rect.top=top
         #新增速度属性
-        self.speed=5
+        self.speed = speed   # ← 用传入的速度
         #新增属性：坦克的移动开关
         self.stop=True
     def move(self):
@@ -282,8 +282,6 @@ class EnemyTank(Tank):
         # 指定坦克初始化位置 分别距X，Y轴的位置
         self.rect.left = left
         self.rect.top = top
-        # 新增速度属性
-        self.speed = speed
         # 新增属性：坦克的移动开关
         self.stop = True
         # 新增步数属性
