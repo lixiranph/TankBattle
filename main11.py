@@ -59,15 +59,14 @@ class MainGame():
     def createEnemyTank(self):
         MainGame.EnemyTank_list.clear()
 
-        # 允许生成的纵向区域（敌人一般从上方进入）
+        # 允许生成的纵向区域（敌人一般从上方进入）e
         TOP_MIN, TOP_MAX = 40, 180
         GAP = 12  # 敌人与敌人/我方之间的最小间距（像素）
         MAX_TRIES = 500  # 最多尝试放置次数，避免死循环
-
         tries = 0
         while len(MainGame.EnemyTank_list) < MainGame.EnemyTank_count and tries < MAX_TRIES:
             tries += 1
-            speed = random.randint(3, 6)
+            speed = random.randint(1, 2)
 
             # 先“临时”创建一个敌人，拿到它的 rect 尺寸
             e = EnemyTank(0, 0, speed)
@@ -159,12 +158,16 @@ class MainGame():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     MainGame.TANK_P1.direction = 'L'
+                    print('坦克向左掉头，并移动')
                 elif event.key == pygame.K_RIGHT:
                     MainGame.TANK_P1.direction = 'R'
+                    print('坦克向右掉头，并移动')
                 elif event.key == pygame.K_UP:
                     MainGame.TANK_P1.direction = 'U'
+                    print('坦克向上掉头，并移动')
                 elif event.key == pygame.K_DOWN:
                     MainGame.TANK_P1.direction = 'D'
+                    print('坦克向下掉头，并移动')
                 elif event.key == pygame.K_SPACE:
                     print('发射子弹')
             # if event.type == pygame.KEYUP:
