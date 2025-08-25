@@ -1,15 +1,11 @@
 '''
-v1.10
-    优化功能：
-        按↑松开再立刻按↓就只动一下就停
-        在 KEYUP 时不要一刀切 stop=True，而是先看是否还有其它方向键按着：
-    新增敌方坦克类
-        1. 完善敌方坦克类
-        2. 创建敌方坦克，将敌方坦克展示到窗口中
+v1.11
+    优化左上角提示信息的展示
+    实现敌方坦克的随机移动
 '''
-import pygame,time,random
-clock = pygame.time.Clock()
-
+import pygame
+import time
+import random
 _display = pygame.display
 version='v1.10'
 COLOR_RED = pygame.Color(255, 0, 0)
@@ -34,10 +30,11 @@ class MainGame():
         MainGame.window=_display.set_mode((MainGame.Screen_width,MainGame.Screen_height))
         #创建我方坦克
         MainGame.TANK_P1=Tank(400,MainGame.Screen_height-200)
-        #？创建敌方坦克
-        self.createEnemyTank()
         #设置一下游戏标题
         _display.set_caption(f'坦克大战{version}')
+        #？创建敌方坦克
+        self.createEnemyTank()
+        clock = pygame.time.Clock()# ← 新增：帧率控制
         #让窗口持续刷新操作
         while True:
             #给窗口完成一个填充颜色
@@ -45,18 +42,20 @@ class MainGame():
             #在循环中持续完成事件的获取
             self.getEvents()
             #将绘制文字得到的画布，粘贴到窗口中
-            MainGame.window.blit(self.getTextSurface(f'剩余敌方坦克5辆'),(5,5))
+            self.handleContinuousMove()  # ← 新增：每帧处理长按连续移动
+
+            MainGame.window.blit(self.getTextSurface(f'剩余敌方坦克{len(MainGame.EnemyTank_list)}辆'),(5,5))
             #将我方坦克加入到窗口中
             MainGame.TANK_P1.displayTank()
-            #循环展示敌方坦克
+
             self.blitEnemyTank()
             #根据坦克开关状态调用坦克的移动方法
-            if MainGame.TANK_P1 and not MainGame.TANK_P1.stop:
-                MainGame.TANK_P1.move()
+            # if MainGame.TANK_P1 and not MainGame.TANK_P1.stop:
+            #     MainGame.TANK_P1.move()
+
             #窗口的刷新
             _display.update()
-            clock.tick(45)
-    #创建敌方坦克
+            clock.tick(60)  # ← 用 tick 控帧，代替 time.sleep
     def createEnemyTank(self):
         MainGame.EnemyTank_list.clear()
 
@@ -100,6 +99,7 @@ class MainGame():
     def blitEnemyTank(self):
         for eTank in MainGame.EnemyTank_list:
             eTank.displayTank()
+            eTank.randMove()
 
     def getTextSurface(self,text):
         '''左上角文字绘制的功能'''
@@ -110,6 +110,41 @@ class MainGame():
         # 使用对应的字符完成相关内容的绘制
         textSurface=font.render(text,True,COLOR_RED)
         return textSurface
+
+    def handleContinuousMove(self):
+        """连续移动：每帧读取当前键盘状态"""
+        keys = pygame.key.get_pressed()
+        p1 = MainGame.TANK_P1
+        if not p1:
+            return
+
+        # 若当前朝向对应的键仍被按着，就保留当前朝向；否则在优先序里选一个正在按的方向
+        pressed_any = False
+        if p1.direction == 'L' and keys[pygame.K_LEFT]:
+            pressed_any = True
+        elif p1.direction == 'R' and keys[pygame.K_RIGHT]:
+            pressed_any = True
+        elif p1.direction == 'U' and keys[pygame.K_UP]:
+            pressed_any = True
+        elif p1.direction == 'D' and keys[pygame.K_DOWN]:
+            pressed_any = True
+        else:
+            if keys[pygame.K_LEFT]:
+                p1.direction = 'L';
+                pressed_any = True
+            elif keys[pygame.K_RIGHT]:
+                p1.direction = 'R';
+                pressed_any = True
+            elif keys[pygame.K_UP]:
+                p1.direction = 'U';
+                pressed_any = True
+            elif keys[pygame.K_DOWN]:
+                p1.direction = 'D';
+                pressed_any = True
+
+        if pressed_any:
+            p1.move()
+        # 如果四个方向都没按，什么都不做 => 自然“停下来”
 
     def getEvents(self):
         '''获取程序期间所有的事件（鼠标事件，键盘事件）'''
@@ -123,52 +158,23 @@ class MainGame():
             #判断事件类型是否为按键按下，如果是，继续判断按键是哪一个按键，来进行对应的处理
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    print('坦克向左掉头，移动')
-                    #修改坦克方向
-                    MainGame.TANK_P1.direction='L'
-                    MainGame.TANK_P1.stop=False
-                    #完成移动操作（调用坦克的移动方法）
-                    # MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.direction = 'L'
                 elif event.key == pygame.K_RIGHT:
-                    print('坦克向右掉头，移动')
-                    #修改坦克方向
-                    MainGame.TANK_P1.direction='R'
-                    MainGame.TANK_P1.stop = False
-                    #完成移动操作（调用坦克的移动方法）
-                    #MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.direction = 'R'
                 elif event.key == pygame.K_UP:
-                    print('坦克向上掉头，移动')
-                    #修改坦克方向
-                    MainGame.TANK_P1.direction='U'
-                    MainGame.TANK_P1.stop = False
-                    #完成移动操作（调用坦克的移动方法）
-                    #MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.direction = 'U'
                 elif event.key == pygame.K_DOWN:
-                    print('坦克向下掉头，移动')
-                    #修改坦克方向
-                    MainGame.TANK_P1.direction='D'
-                    MainGame.TANK_P1.stop = False
-                    #完成移动操作（调用坦克的移动方法）
-                    #MainGame.TANK_P1.move()
+                    MainGame.TANK_P1.direction = 'D'
                 elif event.key == pygame.K_SPACE:
                     print('发射子弹')
-            if event.type == pygame.KEYUP and event.key in (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN):
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_LEFT]:
-                    MainGame.TANK_P1.direction = 'L'
-                    MainGame.TANK_P1.stop = False
-                elif keys[pygame.K_RIGHT]:
-                    MainGame.TANK_P1.direction = 'R'
-                    MainGame.TANK_P1.stop = False
-                elif keys[pygame.K_UP]:
-                    MainGame.TANK_P1.direction = 'U'
-                    MainGame.TANK_P1.stop = False
-                elif keys[pygame.K_DOWN]:
-                    MainGame.TANK_P1.direction = 'D'
-                    MainGame.TANK_P1.stop = False
-                else:
-                    MainGame.TANK_P1.stop = True
-
+            # if event.type == pygame.KEYUP:
+            #     #修改坦克的移动状态
+            #     #松开的如果是方向键，才更改移动开关状态
+            #     if (event.key == pygame.K_LEFT
+            #             or event.key == pygame.K_RIGHT
+            #             or event.key == pygame.K_UP
+            #             or event.key == pygame.K_DOWN):
+            #         MainGame.TANK_P1.stop=True
     def endGame(self):
         '''结束游戏方法'''
         print('谢谢使用')
@@ -243,6 +249,8 @@ class EnemyTank(Tank):
         self.speed = speed
         # 新增属性：坦克的移动开关
         self.stop = True
+        # 新增步数属性
+        self.step = 50
     def randDirection(self):
         num=random.randint(1,4)
         if num==1:
@@ -255,9 +263,16 @@ class EnemyTank(Tank):
             return 'R'
     # def displayEnemyTank(self):
     #     super().displayTank()
-
+    def randMove(self):
+        if self.step<=0:
+            self.direction = self.randDirection()
+            self.step = 50
+        else:
+            self.move()
+            self.step -=1
 class Bullet():
     def __init__(self):
+        
         pass
     def move(self):
         '''移动子弹的方法'''
