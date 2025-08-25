@@ -1,14 +1,13 @@
 '''
-v1.15
-    1.子弹打中墙壁的时候，直接消失
-
-    2.解决我方坦克可以无限发射子弹的问题（最多同时存在3发）
+v1.16
+    新增功能:
+        敌方坦克发射子弹
 '''
 import pygame
 import time
 import random
 _display = pygame.display
-version='v1.15'
+version='v1.16'
 COLOR_RED = pygame.Color(255, 0, 0)
 COLOR_BLACK = pygame.Color(0, 0, 0)
 #游戏主窗口
@@ -21,6 +20,7 @@ class MainGame():
     EnemyTank_list=[]#存储所有敌方坦克
     EnemyTank_count=5#创建敌方坦克的数量
     Bullet_list=[] #创建我方子弹列表
+    Enemy_Bullet_list=[] #地方坦克列表
     def __init__(self):
         pass
 
@@ -55,6 +55,8 @@ class MainGame():
             #     MainGame.TANK_P1.move()
             #调用渲染子弹列表的方法
             self.blitBullet()
+            #调用渲染敌方子弹列表的方法
+            self.blitEnemyBullet()
             #窗口的刷新
             _display.update()
             clock.tick(60)  # ← 用 tick 控帧，代替 time.sleep
@@ -101,8 +103,14 @@ class MainGame():
         for eTank in MainGame.EnemyTank_list:
             eTank.displayTank()
             eTank.randMove()
-    #将子弹加入到窗口中
+            #调用敌方坦克的射击方法
+            eBullet=eTank.shot()
+            #将子弹存储到地方子弹列表
+            #如果子弹为None不加入列表
+            if eBullet:
+                MainGame.Enemy_Bullet_list.append(eBullet)
     def blitBullet(self):
+        '''将我方子弹加入到窗口中'''
         for bullet in MainGame.Bullet_list:
             if bullet.live:
                 bullet.displayBullet()
@@ -110,6 +118,14 @@ class MainGame():
                 bullet.bulletMove()
             else:
                 MainGame.Bullet_list.remove(bullet)
+    def blitEnemyBullet(self):
+        for ebullet in MainGame.Enemy_Bullet_list:
+            if ebullet.live:
+                ebullet.displayBullet()
+                #让子弹移动
+                ebullet.bulletMove()
+            else:
+                MainGame.Enemy_Bullet_list.remove(ebullet)
     def getTextSurface(self,text):
         '''左上角文字绘制的功能'''
         #初始化字体模块
@@ -291,6 +307,11 @@ class EnemyTank(Tank):
         else:
             self.move()
             self.step -=1
+    def shot(self):
+        num=random.randint(1,100)
+        if num==1:
+            return Bullet(self)
+
 class Bullet():
     def __init__(self,tank):
         #图片
