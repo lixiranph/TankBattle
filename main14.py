@@ -13,8 +13,8 @@ COLOR_BLACK = pygame.Color(0, 0, 0)
 #游戏主窗口
 class MainGame():
     window = None
-    Screen_height = 500
-    Screen_width = 800
+    Screen_height = 768
+    Screen_width = 1024
     #创建我方坦克
     TANK_P1=None
     EnemyTank_list=[]#存储所有敌方坦克
