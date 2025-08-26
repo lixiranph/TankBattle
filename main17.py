@@ -1,14 +1,15 @@
 '''
-v1.16
+v1.17
     新增功能:
         实现我方子弹和敌方坦克的碰撞逻辑
         使用的是pygame中精灵类的碰撞，让坦克继承精灵类
+        废除了get_event方法，目前用handleContinuousMove()方法解决了卡顿的问题
+        目前使用WASD来控制上下左右
 '''
 import pygame
-import time
 import random
 _display = pygame.display
-version='v1.16'
+version='v1.17'
 COLOR_RED = pygame.Color(255, 0, 0)
 COLOR_BLACK = pygame.Color(0, 0, 0)
 #游戏主窗口
@@ -148,28 +149,27 @@ class MainGame():
         p1 = MainGame.TANK_P1
         if not p1:
             return
-
         # 若当前朝向对应的键仍被按着，就保留当前朝向；否则在优先序里选一个正在按的方向
         pressed_any = False
-        if p1.direction == 'L' and keys[pygame.K_LEFT]:
+        if p1.direction == 'L' and keys[pygame.K_a]:
             pressed_any = True
-        elif p1.direction == 'R' and keys[pygame.K_RIGHT]:
+        elif p1.direction == 'R' and keys[pygame.K_d]:
             pressed_any = True
-        elif p1.direction == 'U' and keys[pygame.K_UP]:
+        elif p1.direction == 'U' and keys[pygame.K_w]:
             pressed_any = True
-        elif p1.direction == 'D' and keys[pygame.K_DOWN]:
+        elif p1.direction == 'D' and keys[pygame.K_s]:
             pressed_any = True
         else:
-            if keys[pygame.K_LEFT]:
+            if keys[pygame.K_a]:
                 p1.direction = 'L'
                 pressed_any = True
-            elif keys[pygame.K_RIGHT]:
+            elif keys[pygame.K_d]:
                 p1.direction = 'R'
                 pressed_any = True
-            elif keys[pygame.K_UP]:
+            elif keys[pygame.K_w]:
                 p1.direction = 'U'
                 pressed_any = True
-            elif keys[pygame.K_DOWN]:
+            elif keys[pygame.K_s]:
                 p1.direction = 'D'
                 pressed_any = True
 
@@ -188,6 +188,8 @@ class MainGame():
                 self.endGame()
             #判断事件类型是否为按键按下，如果是，继续判断按键是哪一个按键，来进行对应的处理
             if event.type == pygame.KEYDOWN:
+                '''
+                不用了，目前用handleContinuousMove()方法解决了卡顿的问题
                 if event.key == pygame.K_LEFT:
                     MainGame.TANK_P1.direction = 'L'
                     print('坦克向左掉头，并移动')
@@ -200,7 +202,8 @@ class MainGame():
                 elif event.key == pygame.K_DOWN:
                     MainGame.TANK_P1.direction = 'D'
                     print('坦克向下掉头，并移动')
-                elif event.key == pygame.K_SPACE:
+                '''
+                if event.key == pygame.K_SPACE:
                     print('发射子弹')
                     if len(MainGame.Bullet_list) < 3:
                         #产生一颗子弹
@@ -210,14 +213,6 @@ class MainGame():
                     else:
                         print('子弹数量不足')
                     print(f'当前屏幕中子弹的数量为{len(MainGame.Bullet_list)}')
-            # if event.type == pygame.KEYUP:
-            #     #修改坦克的移动状态
-            #     #松开的如果是方向键，才更改移动开关状态
-            #     if (event.key == pygame.K_LEFT
-            #             or event.key == pygame.K_RIGHT
-            #             or event.key == pygame.K_UP
-            #             or event.key == pygame.K_DOWN):
-            #         MainGame.TANK_P1.stop=True
     def endGame(self):
         '''结束游戏方法'''
         print('谢谢使用')
