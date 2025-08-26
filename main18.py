@@ -3,6 +3,7 @@ v1.18
     新增功能:
         实现爆炸效果类
         在窗口中展示爆炸效果
+        修复爆炸不在中心点的问题
 '''
 import pygame
 import random
@@ -134,12 +135,14 @@ class MainGame():
                 ebullet.bulletMove()
             else:
                 MainGame.Enemy_Bullet_list.remove(ebullet)
+
     def displayExplodes(self):
-        for explode in MainGame.Explode_list:
-            if explode.live:
-                explode.displayExplode()
+        for exp in MainGame.Explode_list[:]:  # 遍历副本
+            if exp.live:
+                exp.displayExplode()
             else:
-                MainGame.Explode_list.remove(explode)
+                MainGame.Explode_list.remove(exp)
+
     def getTextSurface(self,text):
         '''左上角文字绘制的功能'''
         #初始化字体模块
@@ -376,32 +379,61 @@ class Bullet(BaseItem):
         for eTank in MainGame.EnemyTank_list:
             if pygame.sprite.collide_rect(eTank, self):
                 #产生一个爆炸效果，并将爆炸效果加入到爆炸效果列表
-                explode=Explode(eTank)
+                explode=Explode(center=eTank.rect.center)
                 MainGame.Explode_list.append(explode)
                 self.live=False
                 eTank.live=False
-class Explode():
-    def __init__(self,tank):
-        self.rect=tank.rect
-        self.step=0
-        self.images=[
-            pygame.image.load(r'img\fire\blast1.gif'),
-            pygame.image.load(r'img\fire\blast2.gif'),
-            pygame.image.load(r'img\fire\blast3.gif'),
-            pygame.image.load(r'img\fire\blast4.gif'),
-            pygame.image.load(r'img\fire\blast5.gif'),
-        ]
-        self.image=self.images[self.step]
-        self.live=True
+class Explode:
+    """爆炸效果：以固定 center 居中渲染，每帧保持同一中心点"""
+    # 建议做成类级缓存，避免每次命中都反复 load
+    _frames_cache = None
+
+    @staticmethod
+    def _load_frames():
+        if Explode._frames_cache is None:
+            frames = [
+                pygame.image.load(r'img\fire\blast1.gif').convert_alpha(),
+                pygame.image.load(r'img\fire\blast2.gif').convert_alpha(),
+                pygame.image.load(r'img\fire\blast3.gif').convert_alpha(),
+                pygame.image.load(r'img\fire\blast4.gif').convert_alpha(),
+                pygame.image.load(r'img\fire\blast5.gif').convert_alpha(),
+            ]
+            Explode._frames_cache = frames
+        return Explode._frames_cache
+
+    def __init__(self, center, fps=25, scale=1.0):
+        self.frames = [f.copy() for f in self._load_frames()]
+        # 可选缩放：所有帧按同倍率缩放，便于大/小爆炸
+        if scale != 1.0:
+            self.frames = [pygame.transform.smoothscale(
+                f, (int(f.get_width()*scale), int(f.get_height()*scale))
+            ) for f in self.frames]
+
+        self.index = 0
+        self.frame_ms = max(15, int(1000 / fps))  # 每帧时长（毫秒）
+        self.last_switch = pygame.time.get_ticks()
+
+        self.rect = self.frames[0].get_rect(center=center)  # ✅ 以中心对齐
+        self.center = center
+        self.live = True
+
     def displayExplode(self):
-        '''展示爆炸'''
-        if self.step<len(self.images):
-            MainGame.window.blit(self.image, self.rect)
-            self.image = self.images[self.step]
-            self.step+=1
-        else:
-            self.live=False
-            self.step=0
+        """在 MainGame.window 上绘制当前帧；根据时间推进到下一帧"""
+        if not self.live:
+            return
+        now = pygame.time.get_ticks()
+        if now - self.last_switch >= self.frame_ms:
+            self.index += 1
+            self.last_switch = now
+            if self.index >= len(self.frames):
+                self.live = False
+                return
+            # ✅ 每帧尺寸可能不同，重建 rect 并保持 center 不变
+            self.rect = self.frames[self.index].get_rect(center=self.center)
+
+        # 绘制当前帧
+        MainGame.window.blit(self.frames[self.index], self.rect)
+
 class Wall():
     def __init__(self):
         pass
