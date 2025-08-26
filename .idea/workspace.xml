@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb4a05b4-0ccc-460c-b84d-981b3de027be" name="更改" comment="解决坦克重叠问题">
-      <change afterPath="$PROJECT_DIR$/main17.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="eb4a05b4-0ccc-460c-b84d-981b3de027be" name="更改" comment="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -250,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755950463133</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类">
+      <option name="closed" value="true" />
+      <created>1756191431096</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1756191431096</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +265,8 @@
     <MESSAGE value="first commit" />
     <MESSAGE value="功能还没做完先commit一下" />
     <MESSAGE value="解决坦克重叠问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="解决坦克重叠问题" />
+    <MESSAGE value="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TankBattle$main03.coverage" NAME="main03 覆盖结果" MODIFIED="1755874009077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -271,7 +277,7 @@
     <SUITE FILE_PATH="coverage/TankBattle$main.coverage" NAME="main 覆盖结果" MODIFIED="1755872792873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main06.coverage" NAME="main06 覆盖结果" MODIFIED="1755914061337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main01.coverage" NAME="main01 覆盖结果" MODIFIED="1755868838745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/TankBattle$main17.coverage" NAME="main17 覆盖结果" MODIFIED="1756191114796" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TankBattle$main17.coverage" NAME="main17 覆盖结果" MODIFIED="1756191326863" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main11.coverage" NAME="main11 覆盖结果" MODIFIED="1756108992110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main07.coverage" NAME="main07 覆盖结果" MODIFIED="1756090642852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main08.coverage" NAME="main08 覆盖结果" MODIFIED="1756090669232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
