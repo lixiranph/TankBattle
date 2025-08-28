@@ -169,8 +169,6 @@ class MainGame():
         for exp in MainGame.Explode_list[:]:  # 遍历副本
             if exp.live:
                 exp.displayExplode()
-                expMusic=Music(r'Resource/music/blast.wav')
-                expMusic.play()
             else:
                 MainGame.Explode_list.remove(exp)
 
@@ -256,12 +254,15 @@ class MainGame():
                         else:
                             print('子弹数量不足')
                         print(f'当前屏幕中子弹的数量为{len(MainGame.Bullet_list)}')
+                    if event.key == pygame.K_ESCAPE:
+                        self.endGame()
 
 
     def endGame(self):
         '''结束游戏方法'''
         print('谢谢使用')
         #结束python解释器
+        pygame.quit()  # ← 可选，优雅退出
         exit()
 class BaseItem(pygame.sprite.Sprite):
     def __init__(self):
@@ -445,6 +446,7 @@ class Bullet(BaseItem):
                 #产生一个爆炸效果，并将爆炸效果加入到爆炸效果列表
                 explode=Explode(center=eTank.rect.center)
                 MainGame.Explode_list.append(explode)
+                Music(r'Resource/music/blast.wav').play()  # ← 新增：只在创建时播一次
                 self.live=False
                 eTank.live=False
                 if not eTank.live:
@@ -455,6 +457,7 @@ class Bullet(BaseItem):
             # 产生爆炸效果，并加入到爆炸效果列表中
             explode=Explode(center=MainGame.TANK_P1.rect.center)
             MainGame.Explode_list.append(explode)
+            Music(r'Resource/music/blast.wav').play()  # ← 新增
             #修改子弹状态
             self.live=False
             #修改我方坦克状态
