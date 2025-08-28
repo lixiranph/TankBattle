@@ -1,5 +1,5 @@
 '''
-v1.22
+v1.23
     新增功能:
         实现坦克与墙壁之间的碰撞检测
 
@@ -7,7 +7,7 @@ v1.22
 import pygame
 import random
 _display = pygame.display
-version='v1.21'
+version='v1.23'
 COLOR_RED = pygame.Color(255, 0, 0)
 COLOR_BLACK = pygame.Color(0, 0, 0)
 #游戏主窗口
