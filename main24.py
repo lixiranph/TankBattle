@@ -2,7 +2,9 @@
 v1.24
     新增功能:
         实现我方坦克与敌方坦克之间的碰撞检测
-
+        1.1 我方坦克碰到敌方坦克时主动停下来
+        1.2 敌方坦克主动碰撞到我方坦克主动停下来
+        stay()
 '''
 import pygame
 import random
@@ -73,7 +75,7 @@ class MainGame():
 
     def createMyTank(self):
         '''<UNK>创建我方坦克<UNK>'''
-        MainGame.TANK_P1 = Tank(400, MainGame.Screen_height - 200)
+        MainGame.TANK_P1 = MyTank(400, MainGame.Screen_height - 200)
     def createWalls(self):
         '''<UNK>创建墙壁的方法<UNK>'''
         for i in range(6):
@@ -81,7 +83,6 @@ class MainGame():
             MainGame.Wall_list.append(wall)
     def createEnemyTank(self):
         MainGame.EnemyTank_list.clear()
-
         # 允许生成的纵向区域（敌人一般从上方进入）e
         TOP_MIN, TOP_MAX = 40, 180
         GAP = 12  # 敌人与敌人/我方之间的最小间距（像素）
@@ -123,6 +124,8 @@ class MainGame():
             if eTank.live:
                 eTank.displayTank()
                 eTank.randMove()
+                if MainGame.TANK_P1 and MainGame.TANK_P1.live:  # ← 新增
+                    eTank.CrushMyTank()
                 #调用敌方坦克的射击方法
                 eBullet=eTank.shot()
                 #将子弹存储到地方子弹列表
@@ -222,6 +225,7 @@ class MainGame():
                 self._last_log_time = now
             p1.move()
             p1.hitWalls()
+            p1.CrushEnemyTank()
 
     def getEvents(self):
         '''获取程序期间所有的事件（鼠标事件，键盘事件）'''
@@ -314,8 +318,14 @@ class Tank(BaseItem):
         #将坦克加入到窗口中
         MainGame.window.blit(self.image, self.rect)
 class MyTank(Tank):
-    def __init__(self):
-        pass
+    def __init__(self,left,top):
+        super(MyTank,self).__init__(left,top)
+    def CrushEnemyTank(self):
+        '''碰撞敌方坦克方法'''
+        for eTank in MainGame.EnemyTank_list:
+            if pygame.sprite.collide_rect(eTank, self):
+                self.stay()
+                print('碰到敌方坦克了')
 class EnemyTank(Tank):
     def __init__(self, left, top, speed):
         #图片集
@@ -366,6 +376,15 @@ class EnemyTank(Tank):
         num=random.randint(1,100)
         if num==1:
             return Bullet(self)
+    def CrushMyTank(self):
+        '''碰撞我方坦克方法'''
+        """碰撞我方坦克方法（安全判空）"""
+        p1 = MainGame.TANK_P1
+        if not (p1 and getattr(p1, 'live', False)):
+            return
+        if pygame.sprite.collide_rect(self, p1):
+            self.stay()
+            print('碰到我方坦克了')
 class Bullet(BaseItem):
     def __init__(self,tank):
         #图片
