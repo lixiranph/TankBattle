@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb4a05b4-0ccc-460c-b84d-981b3de027be" name="更改" comment="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类">
-      <change afterPath="$PROJECT_DIR$/main21.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main22.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="eb4a05b4-0ccc-460c-b84d-981b3de027be" name="更改" comment="v1.22&#10;新增功能:实现子弹无法穿墙" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -223,7 +219,7 @@
       <workItem from="1756090488608" duration="5801000" />
       <workItem from="1756272334910" duration="1253000" />
       <workItem from="1756277635676" duration="2178000" />
-      <workItem from="1756346986191" duration="2079000" />
+      <workItem from="1756346986191" duration="2713000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -265,7 +261,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756191431096</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="完善墙壁类,创建墙壁，加入窗口，创建墙壁对象，加入到列表中">
+      <option name="closed" value="true" />
+      <created>1756350274907</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1756350274907</updated>
+    </task>
+    <task id="LOCAL-00007" summary="v1.22&#10;新增功能:实现子弹无法穿墙">
+      <option name="closed" value="true" />
+      <created>1756350293103</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1756350293103</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,10 +288,13 @@
     <MESSAGE value="功能还没做完先commit一下" />
     <MESSAGE value="解决坦克重叠问题" />
     <MESSAGE value="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类" />
-    <option name="LAST_COMMIT_MESSAGE" value="v1.16&#10;新增功能:&#10;实现我方子弹和敌方坦克的碰撞逻辑使用的是pygame中精灵类的碰撞，让坦克和子弹继承精灵类" />
+    <MESSAGE value="v1.20&#10;    新增功能:&#10;        死亡后点击R按键可以直接重生" />
+    <MESSAGE value="完善墙壁类,创建墙壁，加入窗口，创建墙壁对象，加入到列表中" />
+    <MESSAGE value="v1.22&#10;新增功能:实现子弹无法穿墙" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.22&#10;新增功能:实现子弹无法穿墙" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/TankBattle$main22.coverage" NAME="main22 覆盖结果" MODIFIED="1756349959539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TankBattle$main22.coverage" NAME="main22 覆盖结果" MODIFIED="1756350097369" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main03.coverage" NAME="main03 覆盖结果" MODIFIED="1755874009077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main09.coverage" NAME="main09 覆盖结果" MODIFIED="1756090527679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TankBattle$main05.coverage" NAME="main05 覆盖结果" MODIFIED="1755912792081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
