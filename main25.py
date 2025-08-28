@@ -9,8 +9,8 @@ _display = pygame.display
 version='v1.25'
 COLOR_RED = pygame.Color(255, 0, 0)
 COLOR_BLACK = pygame.Color(0, 0, 0)
-#游戏主窗口
 class MainGame():
+    '''游戏主窗口'''
     window = None
     Screen_height = 600
     Screen_width = 800
